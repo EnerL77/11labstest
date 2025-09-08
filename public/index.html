@@ -1,201 +1,64 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  />
-  <meta name="theme-color" content="#0b0f16" />
-  <title>Evermind · Voice Demo</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>evermind Test Chat</title>
   <style>
-    :root{
-      color-scheme: dark;
-      --bg: #0b0f16;
-      --panel: #121826;
-      --border: #223047;
-      --text: #e9eef5;
-      --muted: #9aa4b2;
-      --brand: #50b6ff;
-      --radius: 18px;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --container: min(100%, 1000px);
-      --pad: clamp(14px, 4vw, 24px);
-      --fz: 16.5px;
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body{
+    body {
+      font-family: Arial, sans-serif;
       margin: 0;
-      font: var(--fz)/1.55 system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color: var(--text);
-      background: radial-gradient(1200px 600px at 20% -10%, #152038 0%, transparent 60%),
-                  radial-gradient(1000px 500px at 120% 10%, #0f2333 0%, transparent 55%),
-                  linear-gradient(#0b0f16, #0b0f16);
-      padding:
-        env(safe-area-inset-top)
-        env(safe-area-inset-right)
-        env(safe-area-inset-bottom)
-        env(safe-area-inset-left);
+      padding: 0;
+      background: #f9fafb;
+      color: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      text-align: center;
+      padding: 2rem 1rem;
     }
-    /* Helfer */
-    .container { width: var(--container); margin-inline: auto; padding: 10px var(--pad); }
-    .card{
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: var(--pad);
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      color: #222;
     }
-    h1, h2, p { margin: 0; }
-    h1{
-      font-size: clamp(20px, 6.2vw, 32px);
-      line-height: 1.25;
-      letter-spacing: .2px;
-      overflow-wrap: anywhere;
+    p {
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #444;
     }
-    h2{
-      font-size: clamp(18px, 5vw, 24px);
-      line-height: 1.25;
-      overflow-wrap: anywhere;
-      margin-bottom: 8px;
+    .chat {
+      width: 100%;
+      max-width: 400px;
     }
-    .sub{
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: clamp(14px, 4vw, 16px);
-    }
-    .pill{
-      display: inline-flex; align-items: center; gap: 8px;
-      margin: 10px 0 14px;
-      padding: 6px 10px; border-radius: 999px;
-      background: rgba(80,182,255,.12);
-      border: 1px solid rgba(80,182,255,.35);
-      color: #cfe9ff; font-size: 12.5px; font-weight: 600;
-    }
-    /* Header */
-    .site-header{
-      position: sticky; top: 0; z-index: 10;
-      backdrop-filter: saturate(120%) blur(8px);
-      background: rgba(11,15,22,.65);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-    .brandbar{ display: flex; align-items: center; gap: 12px; padding: 12px 0; }
-    .brand{
-      display: inline-flex; align-items: center; gap: 10px;
-      font-weight: 800; letter-spacing: .2px;
-      font-size: clamp(18px, 4.5vw, 20px);
-    }
-    .dot{ width: 10px; height: 10px; border-radius: 50%; background: var(--brand); }
-    .tag{
-      margin-left: auto;
-      color: var(--muted); font-weight: 600; font-size: 12.5px;
-      border: 1px solid var(--border); padding: 6px 10px; border-radius: 999px;
-      white-space: nowrap;
-    }
-    /* Layout */
-    .hero { padding-block: clamp(14px, 3vw, 26px); }
-    .grid { display: grid; gap: 14px; }
-    @media (min-width: 960px){
-      .grid { grid-template-columns: 1fr .9fr; gap: 22px; }
-    }
-    /* Widget */
-    .widget{
-      display: block; width: 100%;
-      /* Höhe: nutze svh (stabil auf Mobile-Viewport),
-         clamp verhindert Über-/Unterlaufen; min sichert Platz. */
-      height: clamp(420px, 68svh, 760px);
-      border-radius: 14px;
+    elevenlabs-convai {
+      width: 100%;
+      height: 500px;
+      border-radius: 12px;
       overflow: hidden;
-      background: #0b0f1a;
-      border: 1px solid var(--border);
-    }
-    /* Infotexte */
-    .list { display: grid; gap: 8px; margin-top: 12px; }
-    .li { color: var(--muted); font-size: 14px; line-height: 1.5; }
-    .li b { color: var(--text); }
-
-    /* Footer */
-    .site-footer{
-      color: var(--muted);
-      border-top: 1px solid rgba(255,255,255,.06);
-      margin-top: 12px;
-    }
-    .foot{
-      display: flex; flex-wrap: wrap; gap: 10px 18px;
-      align-items: center; padding: 12px 0;
-      font-size: 14px;
-    }
-    .foot a{
-      color: #b9c6d6; text-decoration: none; border-bottom: 1px dashed transparent;
-    }
-    .foot a:hover{ border-color: #b9c6d6; }
-
-    /* Accessibilty/OS-Specials */
-    @media (prefers-reduced-motion: reduce){
-      *{ animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition: none !important; }
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
   </style>
-
-  <!-- ElevenLabs Widget -->
-  <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
 </head>
 <body>
+  <h1>evermind Test Chat</h1>
+  <p>
+    Willkommen zum Test-Chat. Klicke unten auf das Mikrofon, erlaube den Zugriff und sprich deine Frage. 
+    Der Chat antwortet dir direkt mit Sprache.
+  </p>
+  
+  <div class="chat">
+    <elevenlabs-convai
+      agent-id="agent_2701k4dev72vff187cxwxqd2je9p"
+      theme="light"
+      class="widget">
+    </elevenlabs-convai>
+  </div>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="container">
-      <div class="brandbar">
-        <div class="brand"><span class="dot"></span><span>Evermind</span></div>
-        <span class="tag">Voice Demo</span>
-      </div>
-    </div>
-  </header>
-
-  <!-- MAIN -->
-  <main class="container hero">
-    <div class="grid">
-      <section class="card">
-        <h1>Evermind · Test Chat</h1>
-        <p class="sub">Tap on Mike in Widget, allow access.</p>
-        <span class="pill">🔊 Realtime · 🎙️ Microphone needed</span>
-
-        <!-- Widget -->
-        <elevenlabs-convai
-          class="widget"
-          agent-id="agent_2701k4dev72vff187cxwxqd2je9p"
-          theme="dark">
-        </elevenlabs-convai>
-
-        <div class="list">
-          <div class="li">• Falls kein Ton: Prüfe Tab-Lautstärke/Berechtigungen.</div>
-          <div class="li">• iOS: Evtl. einmal auf Play tippen (Autoplay-Schutz).</div>
-        </div>
-      </section>
-
-      <aside class="card">
-        <h2>Hinweise</h2>
-        <div class="li">• <b>Datenschutz:</b> Für Produktion Retention/Opt-out konfigurieren.</div>
-        <div class="li">• <b>Browser:</b> Am stabilsten sind Chrome oder Edge (Desktop).</div>
-      </aside>
-    </div>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="container foot">
-      <span>© <span id="y"></span> Evermind</span>
-      <span>·</span>
-      <a href="#" aria-disabled="true">Imprint (Platzhalter)</a>
-      <a href="#" aria-disabled="true">Data (Platzhalter)</a>
-      <a href="#" aria-disabled="true">Contact (Platzhalter)</a>
-    </div>
-  </footer>
-
-  <script>
-    // Jahr im Footer
-    document.getElementById('y').textContent = new Date().getFullYear();
-  </script>
+  <script src="https://elevenlabs.io/convai-widget/index.js"></script>
 </body>
 </html>
