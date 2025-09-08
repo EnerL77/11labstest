@@ -3,55 +3,168 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Mein ElevenLabs Agent</title>
+  <meta name="theme-color" content="#0b0f16" />
+  <title>Evermind · Voice Demo</title>
+
+  <!-- Optional: Favicon (später /public/favicon.svg hinzufügen)
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  -->
+
   <style>
-    :root { color-scheme: dark; }
-    body {
+    :root{
+      color-scheme: dark;
+      --bg: #0b0f16;
+      --bg-grad: radial-gradient(1200px 600px at 20% -10%, #152038 0%, transparent 60%),
+                  radial-gradient(1000px 500px at 120% 10%, #0f2333 0%, transparent 55%),
+                  linear-gradient(#0b0f16, #0b0f16);
+      --panel: #121826;
+      --border: #223047;
+      --text: #e9eef5;
+      --muted: #9aa4b2;
+      --brand: #50b6ff;      /* Evermind Akzent – gern anpassen */
+      --brand-2:#2d72fe;
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
       margin:0;
-      background:#0f1115;
-      color:#e9eef5;
-      font:17px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      font:16.5px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      color:var(--text);
+      background: var(--bg-grad);
       display:grid;
-      place-items:center;
-      min-height:100vh;
-      padding:16px;
+      grid-template-rows:auto 1fr auto;
+      min-height:100dvh;
     }
-    .wrap {
-      width:min(900px,100%);
-      background:#121826;
-      border:1px solid #243;
-      border-radius:16px;
-      padding:clamp(16px,4vw,24px);
-      box-shadow:0 10px 30px rgba(0,0,0,.25);
+
+    /* Header */
+    .site-header{
+      position:sticky; top:0;
+      backdrop-filter:saturate(120%) blur(8px);
+      background: rgba(11,15,22,.65);
+      border-bottom:1px solid rgba(255,255,255,.05);
+      z-index:10;
     }
-    h1 {margin:0 0 6px; font-size:clamp(18px,5vw,22px);}
-    p.sub {margin:0 0 14px; opacity:.8; font-size:clamp(14px,4vw,16px);}
-    .widget {
-      display:block;
-      width:100%;
-      height:70vh;
-      max-height:720px;
-      border-radius:12px;
-      overflow:hidden;
-      background:#0b0f1a;
+    .container{ width:min(1100px,92vw); margin-inline:auto; }
+    .bar{ display:flex; align-items:center; gap:14px; padding:14px 0; }
+    .brand{
+      display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px;
+      font-size: clamp(18px,3.6vw,20px);
+    }
+    .dot{ width:10px; height:10px; border-radius:50%; background:var(--brand) }
+    .tag{ color:var(--muted); font-weight:600; font-size:12.5px; border:1px solid var(--border);
+      padding:6px 10px; border-radius:999px; margin-left:auto; }
+
+    /* Hero */
+    .hero{
+      padding: clamp(18px, 4vw, 32px) 0;
+    }
+    .card{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(16px, 4vw, 26px);
+    }
+    h1{ margin:0 0 6px; font-size: clamp(22px, 6vw, 32px); letter-spacing:.2px }
+    .sub{ margin:0 0 14px; color:var(--muted); font-size: clamp(14px, 3.8vw, 16px) }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      background: rgba(80,182,255,.12);
+      border:1px solid rgba(80,182,255,.35);
+      color:#cfe9ff; padding:6px 10px; border-radius:999px;
+      font-size:12.5px; font-weight:600; margin: 4px 0 12px;
+    }
+
+    /* Widget */
+    .widget{
+      display:block; width:100%;
+      height: 68vh; max-height: 760px; min-height: 420px;
+      background:#0b0f1a; border-radius:14px; overflow:hidden;
+      border:1px solid var(--border);
+    }
+
+    /* Info list */
+    .list{ display:grid; gap:10px; margin-top:12px; }
+    .li{ display:flex; gap:10px; color:var(--muted); font-size:14px }
+    .li b{ color:var(--text) }
+
+    /* Footer */
+    .site-footer{ color:var(--muted); border-top:1px solid rgba(255,255,255,.06); }
+    .foot{ display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center; padding:14px 0 }
+    .foot a{ color:#b9c6d6; text-decoration:none; border-bottom:1px dashed transparent }
+    .foot a:hover{ border-color:#b9c6d6 }
+
+    @media (min-width: 900px){
+      body{ font-size:17px }
+      .grid{ display:grid; grid-template-columns: 1.1fr .9fr; gap:22px }
     }
   </style>
-  <!-- ElevenLabs Widget -->
+
+  <!-- ElevenLabs Widget (lädt Web Component <elevenlabs-convai>) -->
   <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
 </head>
 <body>
-  <main class="wrap">
-    <h1>Realtime Voice – ElevenLabs Agent</h1>
-    <p class="sub">Tippe auf das Mikro im Widget, erlaube Zugriff – dein Agent spricht live mit dir.</p>
 
-    <!-- Deine echte Agent-ID -->
-    <elevenlabs-convai
-      class="widget"
-      agent-id="agent_2701k4dev72vff187cxwxqd2je9p"
-      theme="dark">
-    </elevenlabs-convai>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container">
+      <div class="bar">
+        <div class="brand">
+          <span class="dot"></span>
+          <span>Evermind</span>
+        </div>
+        <span class="tag">Voice Demo</span>
+      </div>
+    </div>
+  </header>
 
-    <p class="hint">Hinweis: Am besten mit Chrome oder Edge testen. iOS braucht evtl. einen Tap, um Audio zu starten.</p>
+  <!-- MAIN -->
+  <main class="container hero">
+    <div class="grid">
+      <section class="card">
+        <h1>MyDai · Gespräch mit Stimme</h1>
+        <p class="sub">Tippe auf das Mikro im Widget, erlaube Zugriff – der Assistent spricht live mit dir.</p>
+        <span class="pill">🔊 Echtzeit · 🎙️ Mikro erforderlich</span>
+
+        <!-- Das eigentliche Widget -->
+        <elevenlabs-convai
+          class="widget"
+          agent-id="agent_2701k4dev72vff187cxwxqd2je9p"
+          theme="dark">
+        </elevenlabs-convai>
+
+        <div class="list">
+          <div class="li">• Falls kein Ton: Stelle sicher, dass der Tab Ton abspielen darf und die Lautstärke ↑ ist.</div>
+          <div class="li">• iOS: Evtl. einmal auf Play tippen (Autoplay-Schutz).</div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <h2 style="margin:0 0 8px; font-size: clamp(18px,4.5vw,22px)">Hinweise</h2>
+        <div class="li">• <b>Kontingent</b>: Wenn das Monats-Kontingent leer ist, stoppt der Chat frühzeitig.</div>
+        <div class="li">• <b>Stimme/LLM</b>: Auswahl & Zugriff im ElevenLabs-Dashboard (Agent-Einstellungen).</div>
+        <div class="li">• <b>Datenschutz</b>: Nutze diese Demo nicht für sensible Daten. Für Produktion: Zero-Retention/Opt-out konfigurieren.</div>
+        <div class="li">• <b>Browser</b>: Am stabilsten sind Chrome/Edge (Desktop).</div>
+      </aside>
+    </div>
   </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container foot">
+      <span>© <span id="y"></span> Evermind</span>
+      <span>·</span>
+      <a href="#" aria-disabled="true">Impressum (Platzhalter)</a>
+      <a href="#" aria-disabled="true">Datenschutz (Platzhalter)</a>
+      <a href="#" aria-disabled="true">Kontakt (Platzhalter)</a>
+    </div>
+  </footer>
+
+  <script>
+    // Jahr im Footer
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
